@@ -24,25 +24,27 @@
                             <constraint firstAttribute="width" constant="40" id="dLt-KX-BtO"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USA" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zip-kj-mek">
-                        <rect key="frame" x="80" y="0.0" width="304" height="91"/>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                        <nil key="textColor"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USA" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zip-kj-mek">
+                        <rect key="frame" x="65" y="0.0" width="319" height="91"/>
+                        <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="BjL-cj-Z2m" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8BO-eb-Lgc"/>
                     <constraint firstAttribute="bottom" secondItem="Zip-kj-mek" secondAttribute="bottom" id="8RX-oM-5sx"/>
                     <constraint firstItem="Zip-kj-mek" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="MtL-vV-0a8"/>
                     <constraint firstItem="BjL-cj-Z2m" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" symbolic="YES" id="Nei-u1-p64"/>
                     <constraint firstAttribute="trailing" secondItem="Zip-kj-mek" secondAttribute="trailing" constant="20" symbolic="YES" id="Y6s-AB-0SO"/>
-                    <constraint firstItem="Zip-kj-mek" firstAttribute="leading" secondItem="BjL-cj-Z2m" secondAttribute="trailing" constant="20" id="aa0-lP-CSZ"/>
+                    <constraint firstItem="Zip-kj-mek" firstAttribute="leading" secondItem="BjL-cj-Z2m" secondAttribute="trailing" constant="5" id="aa0-lP-CSZ"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="flagImageView" destination="BjL-cj-Z2m" id="yGw-lZ-5o6"/>
+                <outlet property="name" destination="Zip-kj-mek" id="2hR-JC-I1l"/>
                 <outlet property="optionLabel" destination="Zip-kj-mek" id="dch-lk-vM4"/>
             </connections>
             <point key="canvasLocation" x="57.971014492753625" y="113.50446428571428"/>

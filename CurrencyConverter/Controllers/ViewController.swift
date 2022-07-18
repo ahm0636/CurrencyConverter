@@ -35,6 +35,8 @@ class ViewController: UIViewController {
                           "TND", "TRY", "UAH", "AED", "UYU", "VES", "VND", "XDR", "YER", "ZAR"]
 
     var unabledTextField: Bool = true
+    var check1: Bool = false
+    var check2: Bool = false
     var itemSelected = 0
     var itemSelected2 = 1
     var amount: String = ""
@@ -52,6 +54,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var currencyChangeView: UIView!
     @IBOutlet weak var dropDownListView: UIView!
 
+    @IBOutlet weak var dropDownListView2: UIView!
+
 
     @IBOutlet weak var currencyLabel2: UILabel!
     @IBOutlet weak var currentCurrencyLabel: UILabel!
@@ -65,7 +69,13 @@ class ViewController: UIViewController {
                          mainCur: secondTextField.text,
                          text: currentCurrencyLabel.text,
                          changeView: currencyChangeView2)
-        print("tapped")
+
+        let test = Double(round(1000 * exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])!.doubleValue) / 1000)
+        firstTextField.text = String(test)
+
+        let test2 = Double(round(1000 * exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])!.doubleValue) / 1000)
+        secondTextField.text = String(test2)
+
     }
 
     override func viewDidLoad() {
@@ -93,6 +103,9 @@ class ViewController: UIViewController {
             self.list = data
             self.displayedCurrencies = self.list
             DispatchQueue.main.async {
+                self.changeCurButton.isHidden = true
+                self.firstTextField.text = self.exchange(self.secondTextField.text?.toDouble() ?? 0.0, from: self.list[self.itemSelected2], to: self.list[1])
+                self.secondTextField.text = self.exchange(self.firstTextField.text?.toDouble() ?? 0.0, from: self.list[1], to: self.list[0])
                 self.tableView.reloadData()
             }
         }
@@ -106,17 +119,18 @@ class ViewController: UIViewController {
         currencyChangeView2.addGestureRecognizer(viewGestureRecognizer2)
 
         currencyDropDown()
+
     }
 
     @objc func textFieldDidEditingChange() {
         //    firstTextField.text = exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])
-        let test = Double(round(100 * exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])!.doubleValue) / 100)
+        let test = Double(round(1000 * exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])!.doubleValue) / 1000)
         firstTextField.text = String(test)
     }
 
     @objc func textFieldDidEditingChange2() {
         //  secondTextField.text = exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])
-        let test = Double(round(100 * exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])!.doubleValue) / 100)
+        let test = Double(round(1000 * exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])!.doubleValue) / 1000)
         secondTextField.text = String(test)
     }
 
@@ -128,8 +142,7 @@ class ViewController: UIViewController {
 
     func currencyDropDown() {
         // currency choose (dropDown)
-
-        dropDown.anchorView = dropDownListView
+        dropDown.anchorView = dropDownListView2
         dropDown.dataSource = dropDownValue
 
         dropDown2.anchorView = dropDownListView
@@ -140,28 +153,38 @@ class ViewController: UIViewController {
         }
 
         // dropDown for the second textField
-        dropDown.width = 150
+        dropDown.width = 90
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             print("Selected item \(item) at index: \(index)")
             itemSelected = index
             print(itemSelected)
+            check1 = true
+//            if check1 && check2 {
+//                changeCurButton.isHidden = false
+//            }
             self.currentCurrencyLabel.text = dropDownValue[index]
             self.currentCurrencyImage.image = UIImage(named: dropDownValue[index])
             // recalculate
-            let test = Double(round(100 * exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])!.doubleValue) / 100)
+            let test = Double(round(1000 * exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])!.doubleValue) / 1000)
             firstTextField.text = String(test)
             //            firstTextField.text = exchange(secondTextField.text?.toDouble() ?? 0.0, from: list[itemSelected2], to: list[itemSelected])
         }
 
         // dropDown for the first textField
-        dropDown2.width = 150
+        dropDown2.width = 90
+        dropDown.backgroundColor = .white
+
         dropDown2.selectionAction = { [unowned self] (index: Int, item: String) in
             print("Selected item \(item) at index: \(index)")
             itemSelected2 = index
+            check2 = true
+//            if check1 && check2 == true {
+//                changeCurButton.isHidden = false
+//            }
             self.currencyLabel2.text = dropDownValue[index]
             self.currencyImage2.image = UIImage(named: dropDownValue[index])
             // recalculate
-            let test = Double(round(100 * exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])!.doubleValue) / 100)
+            let test = Double(round(1000 * exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])!.doubleValue) / 1000)
             secondTextField.text = String(test)
             //            secondTextField.text = exchange(firstTextField.text?.toDouble() ?? 0.0, from: list[itemSelected], to: list[itemSelected2])
         }
@@ -172,7 +195,10 @@ class ViewController: UIViewController {
                 return
             }
             cell.flagImageView?.image = UIImage(named: "\(self.dropDownValue[index])") ?? nil
+            cell.name.text = self.dropDownValue[index]
         }
+
+
 
         dropDown2.cellNib = UINib(nibName: "MyDropDownCell", bundle: nil)
         dropDown2.customCellConfiguration = { index, title, cell in
@@ -180,7 +206,9 @@ class ViewController: UIViewController {
                 return
             }
             cell.flagImageView?.image = UIImage(named: "\(self.dropDownValue[index])") ?? nil
+            cell.name.text = self.dropDownValue[index]
         }
+
     }
 
     func exchange(_ amount: Double, from: Currencyy, to: Currencyy) -> String? {
@@ -209,7 +237,6 @@ class ViewController: UIViewController {
         return result
     }
 
-
     func revertCurrencies(mainImg: UIImage?,
                           mainCur: String?,
                           text: String?,
@@ -231,27 +258,13 @@ class ViewController: UIViewController {
         dropDown2.show()
     }
 
-    func getConversionData() -> ConversionData? {
-        guard
-            let amount = currentCurrencyLabel.text,
-            let fromCur = secondTextField.text,
-            let toCur = firstTextField.text
-        else {
-            return nil
-        }
-        let conversionData = ConversionData(fromCurrency: fromCur,
-                                            toCurrency: toCur,
-                                            fromAmount: Double(amount.replacingOccurrences(of: ",", with: ".")) ?? 0.0)
-        return conversionData
-    }
-
 }
 
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        60
+        70
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
