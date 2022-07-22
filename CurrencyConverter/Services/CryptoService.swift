@@ -5,6 +5,11 @@
 //  Created by Ahmed App iOS Dev - 1 on 14/07/22.
 //
 
+/*
+ URL:
+ https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h
+ */
+
 import Foundation
 
 final class CryptoService {
@@ -13,7 +18,9 @@ final class CryptoService {
     private struct Constants {
         static let apiKey = "5624573F-E6A6-46CD-B8A2-26C064B1F820"
         static let assetsEndpoint = "https://rest-sandbox.coinapi.io/v1/assets/"
+        static let url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
     }
+
 
     private init() {}
 
@@ -23,14 +30,11 @@ final class CryptoService {
     private var whenReadyBlock: ((Result<[Crypto], Error>) -> Void)?
     // MARK: - Public
     public func getAllCryptoData(completion: (([Crypto]?) -> Void)?) {
-//        guard !icons.isEmpty else {
-//            whenReadyBlock = completion
-//            return
-//        }
-        guard let url = URL(string: Constants.assetsEndpoint + "?apikey=" + Constants.apiKey) else {
+        guard let url = URL(string: Constants.url) else {
             completion?(nil)
             return
         }
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 print(error.localizedDescription)
@@ -40,8 +44,6 @@ final class CryptoService {
                         completion?(nil)
                         return
                     }
-
-                    let cryptos = try JSONDecoder().decode([Crypto].self, from: data)
                     self.data = try JSONDecoder().decode([Crypto].self, from: data)
                     completion?(self.data.sorted { first, second  in
                         first.priceUSD ?? 0 > second.priceUSD ?? 0})
@@ -65,9 +67,6 @@ final class CryptoService {
             }
             do {
                 self?.icons = try JSONDecoder().decode([Icon].self, from: data)
-//                if let completion = self?.whenReadyBlock {
-//                    self?.getAllCryptoData(completion: completion)
-//                }
             }
             catch {
                 print(error)
@@ -82,14 +81,17 @@ struct Crypto: Decodable {
     let name: String?
     let priceUSD: Float?
     let idIcon: String?
-
+    let symbol: String?
+    let priceChangeDaily: Double?
 
     enum CodingKeys: String, CodingKey {
         typealias RawValue = String
         case name = "name"
+        case symbol = "symbol"
         case assetID = "asset_id"
-        case priceUSD = "price_usd"
+        case priceUSD = "current_price"
         case idIcon = "id_icon"
+        case priceChangeDaily = "price_change_24h"
 
     }
     init(from decoder: Decoder) throws {
@@ -98,6 +100,8 @@ struct Crypto: Decodable {
         self.assetID = try? container.decode(String.self, forKey: .assetID)
         self.priceUSD = try? container.decode(Float.self, forKey: .priceUSD)
         self.idIcon = try? container.decode(String.self, forKey: .idIcon)
+        self.symbol = try? container.decode(String.self, forKey: .symbol)
+        self.priceChangeDaily = try? container.decode(Double.self, forKey: .priceChangeDaily)
     }
 }
 

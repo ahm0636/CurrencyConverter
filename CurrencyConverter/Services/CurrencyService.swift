@@ -36,6 +36,7 @@ class CurrencyService: NSObject {
                         self.data = try JSONDecoder().decode([Currencyy].self, from: data)
                         self.currencyTypes = self.data.compactMap { $0.ccy }
 
+
                     } catch {
                         print(error.localizedDescription)
                     }

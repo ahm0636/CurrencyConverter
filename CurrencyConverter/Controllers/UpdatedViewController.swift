@@ -37,7 +37,7 @@ class UpdatedViewController: UIViewController {
     var itemSelected = 0
     var itemSelected2 = 1
     var amount: String = ""
-
+    
     var isSearching = false
 
     // MARK: - OUTLETS
@@ -57,12 +57,6 @@ class UpdatedViewController: UIViewController {
             }
         }
     }
-
-    // MARK: - ACTIONS
-
-
-    // MARK: - FUNCTIONS
-
 
 
 }

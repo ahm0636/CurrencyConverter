@@ -39,6 +39,7 @@ class ViewController: UIViewController {
     var check2: Bool = false
     var itemSelected = 0
     var itemSelected2 = 1
+
     var amount: String = ""
 
     var isSearching = false
@@ -87,6 +88,7 @@ class ViewController: UIViewController {
         self.title = "Converter"
 
         secondTextField.keyboardType = UIKeyboardType.decimalPad
+        firstTextField.keyboardType = .decimalPad
 
         // show date
         dateLabel.text = ("\(date.get(.day)).\(date.get(.month)).\(date.get(.year))")
@@ -210,6 +212,7 @@ class ViewController: UIViewController {
         }
 
     }
+
 
     func exchange(_ amount: Double, from: Currencyy, to: Currencyy) -> String? {
         guard let fromRate = from.rate, let toRate = to.rate else {

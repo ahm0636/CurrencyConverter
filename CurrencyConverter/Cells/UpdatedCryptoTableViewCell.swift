@@ -13,13 +13,24 @@ class UpdatedCryptoTableViewCell: UITableViewCell {
     @IBOutlet weak var imageCrypto: UIImageView!
     @IBOutlet weak var symbol: UILabel!
     @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var changeDaily: UILabel!
+
+    let character: Character = "-"
 
     var data: Crypto! {
         didSet {
             self.name.text = data.name ?? "N/A"
-            self.symbol.text = data.assetID ?? "N/A"
+            self.symbol.text = data.symbol?.uppercased() ?? "N/A"
             self.value?.text = "\(String(describing: data.priceUSD ?? 0.0))$"
-            self.imageCrypto.image = UIImage(named: data.name ?? "")
+            self.imageCrypto.image = UIImage(named: data.symbol?.uppercased() ?? "")
+            self.changeDaily.text = "\(String(Double(round(100 * data.priceChangeDaily!) / 100)))"
+            
+            if self.changeDaily.text!.contains(character) {
+                changeDaily.textColor = .red
+            } else {
+                changeDaily.textColor = .green
+            }
+
         }
     }
 
